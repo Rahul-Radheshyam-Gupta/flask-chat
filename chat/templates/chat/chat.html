@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block pageTitle %}
+{{name}}
+{% endblock pageTitle %}
+
+{% block content %}
+<style>
+    .messageDiv{
+        height: 450px;
+        overflow-y: scroll;
+        border: 0.5px solid #333;
+    }
+    .list-group-item{
+        background-color: transparent;
+        color: white;
+    }
+</style>
+    <div class="chatDiv">
+        <div class="room-detail d-flex justify-content-between p-2">
+            <span class="name">Name: {{name}}</span>
+            <span class="code">Code: {{code}} </span>
+        </div>
+        <div class="messageDiv">
+            <ul class="messages list-group">
+                {% for i in nums %}
+                    <li class="list-group-item">
+                        <span>Rahul:</span>
+                        <span> Hi World 
+                            Need something more than these examples? Take Bootstrap to the next level with premium themes from the official Bootstrap Themes marketplace. They’re built as their own extended frameworks, rich with new components and plugins, documentation, and powerful build tools.
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="sendMessage">
+            <div class="textInput">
+                <textarea class="form-control" id="message"></textarea>
+                <button  class="btn btn-primary m-2 float-end" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+    
+
+{% endblock content %}
+{% block script %}
+<script type="text/javascript">
+    var socketio = io();
+  
+    const messages = $(".messages");
+  
+    const createMessage = (name, msg) => {
+      const content = `
+            <li class="list-group-item">
+                        <span>${name}:</span>
+                        <span> ${msg} </span>
+            </li>
+      `;
+      messages.append(content)
+    };
+  
+    socketio.on("message", (data) => {
+        console.log("Called create Message")
+      createMessage(data.name, data.message);
+    });
+  
+    const sendMessage = () => {
+      const message = document.getElementById("message");
+      if (message.value == "") return;
+    
+      console.log("Sending message: ", message.value)
+      socketio.emit("message", { data: message.value }, (resp)=>{console.log("emitted output", resp)});
+      message.value = "";
+    };
+  </script>
+{% endblock script %}
