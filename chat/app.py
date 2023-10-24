@@ -62,8 +62,9 @@ def disconnect():
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
 
-
-
 @app.route('/')
 def index():
     return render_template('chat/room.html')
+
+if __name__ == "__main__":
+    socketio.run(app, debug=True)

@@ -16,7 +16,7 @@ def generate_unique_code(length):
     
     return code
 
-@chat_bp.route("/create_or_join", methods=["GET", "POST"])
+@chat_bp.route("/create_or_join", methods=["POST"])
 def create_or_join_room():
     session.clear()
     name = request.form.get("name")
@@ -39,8 +39,7 @@ def create_or_join_room():
 
 @chat_bp.route("/room")
 def room():
-    print("==============>  in Chat room")
-    room = session['room']
+    room = session.get('room', None)
     if room is None or session.get("name") is None or room not in rooms:
-        return redirect(url_for("chat.create_or_join_room"))
+        return redirect(url_for("index"))
     return render_template('chat/chat.html', name=session['name'], code=session['room'], nums=[1,2])

@@ -72,5 +72,11 @@
       socketio.emit("message", { data: message.value }, (resp)=>{console.log("emitted output", resp)});
       message.value = "";
     };
+
+    $('#message').on('keyup', (e)=>{
+        if (e.key === "Enter") {
+            sendMessage();
+            }
+    })
   </script>
 {% endblock script %}
